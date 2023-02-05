@@ -32,4 +32,14 @@ func main() {
 
 theEnd:
 	fmt.Println("End of Program")
+
+	var out int
+	for j := 0; j < 20; j++ {
+		out = j*j + out
+		if out > 12 {
+			goto theEnd2
+		}
+	}
+theEnd2:
+	fmt.Println(out)
 }
