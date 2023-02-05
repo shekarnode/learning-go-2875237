@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -11,25 +10,42 @@ import (
 
 func main() {
 	reader := bufio.NewReader(os.Stdin)
-
-	fmt.Print("Value 1: ")
-	input1, _ := reader.ReadString('\n')
-	float1, err := strconv.ParseFloat(strings.TrimSpace(input1), 64)
-	if err != nil {
-		fmt.Println(err)
-		panic("Value 1 must be a number")
+	value1 := acceptFloatValue(*reader, "value 1")
+	value2 := acceptFloatValue(*reader, "value 2")
+	fmt.Printf(" value1 : %v , value2: %v \n", value1, value2)
+	fmt.Printf("Select operator (+,-,*,/) ")
+	operator, _ := acceptOperator(*reader)
+	var result float64
+	switch strings.TrimSpace(operator) {
+	case "+":
+		result = value1 + value2
+	case "-":
+		result = value1 - value2
+	case "*":
+		result = value1 * value2
+	case "/":
+		result = value1 / value2
+	default:
+		fmt.Println("invalid operand !!")
 	}
 
-	fmt.Print("Value 2: ")
-	input2, _ := reader.ReadString('\n')
-	float2, err := strconv.ParseFloat(strings.TrimSpace(input2), 64)
+	fmt.Printf("result is : %.2f", result)
+
+}
+
+func acceptFloatValue(reader bufio.Reader, prompt string) float64 {
+	fmt.Printf("%v :", prompt)
+	input, _ := reader.ReadString('\n')
+	inputConvValue, err := strconv.ParseFloat(strings.TrimSpace(input), 64)
 	if err != nil {
-		fmt.Println(err)
-		panic("Value 2 must be a number")
+		message := fmt.Sprintf("%v must be a number", prompt)
+		panic(message)
 	}
+	return inputConvValue
+}
 
-	sum := float1 + float2
-	sum = math.Round(sum*100) / 100
-	fmt.Printf("The sum of %v and %v is %v\n\n", float1, float2, sum)
-
+func acceptOperator(reader bufio.Reader) (string, error) {
+	input, err := reader.ReadString('\n')
+	fmt.Println("input operand :", input)
+	return input, err
 }
